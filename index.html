@@ -4,96 +4,254 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CART</title>
+    <title>CART - Your Smart Shopping Cart</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      .hero-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+      .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+      .nav-link {
+        position: relative;
+      }
+      .nav-link:after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -2px;
+        left: 0;
+        background-color: #ef4444;
+        transition: width 0.3s ease;
+      }
+      .nav-link:hover:after {
+        width: 100%;
+      }
+    </style>
   </head>
-  <body>
+  <body class="font-sans antialiased">
     <!-- Navbar -->
-    <div class="customNavbar">
-      <header class="text-gray-600 body-font bg-purple-400">
-        <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-          <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              class="w-10 h-10 text-white p-2 bg-red-500 rounded-full"
-              viewBox="0 0 24 24"
-            >
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-            </svg>
-            <span class="ml-3 text-xl">CART</span>
-          </a>
-          <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
-            <a class="mr-5 hover:text-red-900 hover:border-b-4" href="index.html">HOME</a>
-            <a class="mr-5 hover:text-red-900" href="cart.html">CART</a>
-            <a class="mr-5 hover:text-red-900" href="aboutus.html">ABOUT US</a>
-            <a class="mr-5 hover:text-red-900" href="contactus.html">CONTACT US</a>
-          </nav>
-          <!-- Logout Button -->
-          <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded">
-            Logout
-          </button>
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+      <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <div class="w-10 h-10 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center">
+            <i class="fas fa-shopping-cart text-white"></i>
+          </div>
+          <span class="text-xl font-bold text-gray-800">ShopEasy</span>
         </div>
-      </header>
-    </div>
+        
+        <nav class="hidden md:flex space-x-8">
+          <a href="index.html" class="nav-link text-gray-600 hover:text-gray-900 font-medium">Home</a>
+          <a href="cart.html" class="nav-link text-gray-600 hover:text-gray-900 font-medium">Cart</a>
+          <a href="aboutus.html" class="nav-link text-gray-600 hover:text-gray-900 font-medium">About</a>
+          <a href="contactus.html" class="nav-link text-gray-600 hover:text-gray-900 font-medium">Contact</a>
+        </nav>
+        
+        <button onclick="logout()" class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2 rounded-full font-medium hover:shadow-lg transition-all duration-300">
+          Logout <i class="fas fa-sign-out-alt ml-1"></i>
+        </button>
+        
+        <!-- Mobile menu button -->
+        <button class="md:hidden text-gray-600">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+      </div>
+    </header>
 
-    <div class="custom"></div>
-
-    <div class="bg-purple-400">
-      <section class="text-gray-600 body-font">
-        <div class="container mx-auto flex px-5 py-24 md:flex-row flex-col items-center">
-          <div class="lg:flex-grow md:w-1/2 lg:pr-24 md:pr-16 flex flex-col md:items-start md:text-left mb-16 md:mb-0 items-center text-center">
-            <h1 class="title-font sm:text-4xl text-3xl mb-4 font-medium text-gray-900">
-              Smart, Simple, and Seamless <br class="hidden lg:inline-block">Shopping
+    <!-- Hero Section -->
+    <section class="hero-gradient text-white">
+      <div class="container mx-auto px-4 py-20 md:py-32">
+        <div class="flex flex-col md:flex-row items-center">
+          <div class="md:w-1/2 mb-12 md:mb-0">
+            <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-6">
+              Smart Shopping <br>
+              <span class="text-red-300">Simplified</span>
             </h1>
-            <p class="mb-8 leading-relaxed">
-              Experience hassle-free shopping with our intuitive cart system. Enjoy a smooth, secure, and efficient checkout process designed to make your purchases quick and effortless.
+            <p class="text-xl text-gray-100 mb-8 max-w-lg">
+              Discover the easiest way to shop online with our intuitive cart system. Enjoy seamless checkout, smart recommendations, and secure payments.
             </p>
-            <div class="flex justify-center">
-              <button class="inline-flex text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded text-lg">
-                <a href="aboutus.html">Read More</a>
-              </button>
-              <button class="ml-4 inline-flex text-gray-700 bg-gray-100 border-0 py-2 px-6 focus:outline-none hover:bg-gray-200 rounded text-lg">
-                <a href="cart.html">Go to cart</a>
+            <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+              <a href="cart.html" class="bg-white text-purple-700 hover:bg-gray-100 font-semibold px-6 py-3 rounded-full text-center transition duration-300">
+                Start Shopping <i class="fas fa-arrow-right ml-2"></i>
+              </a>
+              <a href="aboutus.html" class="border-2 border-white text-white hover:bg-white hover:text-purple-700 font-semibold px-6 py-3 rounded-full text-center transition duration-300">
+                Learn More
+              </a>
+            </div>
+          </div>
+          <div class="md:w-1/2 flex justify-center">
+            <img src="https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=880&q=80" 
+                 alt="Happy shopping" 
+                 class="rounded-xl shadow-2xl w-full max-w-md object-cover">
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="py-16 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">Why Choose Our Cart?</h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            We've designed the shopping experience to be as smooth and enjoyable as possible
+          </p>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="feature-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
+            <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mb-6">
+              <i class="fas fa-bolt text-red-500 text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-3 text-gray-800">One click Purchase</h3>
+            <p class="text-gray-600">Checkout in seconds with our optimized one-click purchase system.</p>
+          </div>
+          
+          <div class="feature-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
+            <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+              <i class="fas fa-shield-alt text-blue-500 text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-3 text-gray-800">Secure Payments</h3>
+            <p class="text-gray-600">Your transactions are protected with bank-level encryption.</p>
+          </div>
+          
+          <div class="feature-card bg-white p-8 rounded-xl shadow-md transition-all duration-300">
+            <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-6">
+              <i class="fas fa-sync-alt text-green-500 text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-3 text-gray-800">Smart Cart</h3>
+            <p class="text-gray-600">Access your cart from any device and pick up where you left off.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">What Our Customers Say</h2>
+          <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+            Don't just take our word for it - hear from our happy shoppers
+          </p>
+        </div>
+        
+        <div class="grid md:grid-cols-2 gap-8">
+          <div class="bg-gray-50 p-8 rounded-xl">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-purple-200 rounded-full flex items-center justify-center mr-4">
+                <i class="fas fa-user text-purple-600"></i>
+              </div>
+              <div>
+                <h4 class="font-semibold">Sara</h4>
+                <div class="flex text-yellow-400">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                </div>
+              </div>
+            </div>
+            <p class="text-gray-600 italic">
+              "I've never experienced such a smooth checkout process. The cart remembers my preferences and makes shopping easy!"
+            </p>
+          </div>
+          
+          <div class="bg-gray-50 p-8 rounded-xl">
+            <div class="flex items-center mb-4">
+              <div class="w-12 h-12 bg-blue-200 rounded-full flex items-center justify-center mr-4">
+                <i class="fas fa-user text-blue-600"></i>
+              </div>
+              <div>
+                <h4 class="font-semibold">Ben</h4>
+                <div class="flex text-yellow-400">
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star"></i>
+                  <i class="fas fa-star-half-alt"></i>
+                </div>
+              </div>
+            </div>
+            <p class="text-gray-600 italic">
+              "I've discovered so many great products through this cart system."
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+      <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-bold mb-6">Ready to Transform Your Shopping Experience?</h2>
+        <p class="text-xl mb-8 max-w-2xl mx-auto">
+          Join thousands of happy customers who shop smarter with our cart system.
+        </p>
+        <a href="cart.html" class="inline-block bg-white text-purple-700 hover:bg-gray-100 font-semibold px-8 py-3 rounded-full text-center transition duration-300 shadow-lg">
+          Get Started Now <i class="fas fa-shopping-cart ml-2"></i>
+        </a>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-gray-300 py-12">
+      <div class="container mx-auto px-4">
+        <div class="grid md:grid-cols-4 gap-8">
+          <div>
+            <div class="flex items-center space-x-2 mb-4">
+              <div class="w-10 h-10 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center">
+                <i class="fas fa-shopping-cart text-white"></i>
+              </div>
+              <span class="text-xl font-bold text-white">CART</span>
+            </div>
+            <p class="mb-4">
+              Making online shopping simpler, faster, and more enjoyable.
+            </p>
+            <div class="flex space-x-4">
+              <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
+          
+          <div>
+            <h3 class="text-white font-semibold text-lg mb-4">Quick Links</h3>
+            <ul class="space-y-2">
+              <li><a href="index.html" class="hover:text-white transition">Home</a></li>
+              <li><a href="cart.html" class="hover:text-white transition">Your Cart</a></li>
+              <li><a href="aboutus.html" class="hover:text-white transition">About Us</a></li>
+              <li><a href="contactus.html" class="hover:text-white transition">Contact</a></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 class="text-white font-semibold text-lg mb-4">Help & Info</h3>
+            <ul class="space-y-2">
+              <li><a href="#" class="hover:text-white transition">FAQs</a></li>
+              <li><a href="#" class="hover:text-white transition">Shipping Info</a></li>
+              <li><a href="#" class="hover:text-white transition">Returns Policy</a></li>
+              <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 class="text-white font-semibold text-lg mb-4">Newsletter</h3>
+            <div class="flex">
+              <input type="email" placeholder="Your email" class="px-4 py-2 rounded-l focus:outline-none text-gray-800 w-full">
+              <button class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-r">
+                <i class="fas fa-paper-plane"></i>
               </button>
             </div>
           </div>
-          <div class="lg:max-w-lg lg:w-full md:w-1/2 w-5/6">
-            <img class="object-cover object-center rounded" alt="hero" 
-              src="https://images.unsplash.com/photo-1504281186-f427c16ed131?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80">
-          </div>
         </div>
-      </section>
-    </div>
-
-    <!-- Footer -->
-    <footer class="text-black-600 body-font bg-purple-400">
-      <div class="container px-5 py-24 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
-        <div class="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
-          <a class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              class="w-10 h-10 text-white p-2 bg-red-500 rounded-full" viewBox="0 0 24 24">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-            </svg>
-          </a>
-          <p class="mt-2 text-sm text-black-500">Air plant banjo lyft occupy retro adaptogen indego</p>
-        </div>
-        <div class="flex-grow flex flex-wrap md:pl-20 -mb-10 md:mt-0 mt-10 md:text-left text-center">
-          <div class="lg:w-1/4 md:w-1/2 w-full px-4">
-            <h2 class="title-font font-medium text-gray-900 tracking-widest text-sm mb-3">CATEGORIES</h2>
-            <nav class="list-none mb-10">
-              <li><a class="text-gray-600 hover:text-gray-800">First Link</a></li>
-              <li><a class="text-gray-600 hover:text-gray-800">Second Link</a></li>
-              <li><a class="text-gray-600 hover:text-gray-800">Third Link</a></li>
-              <li><a class="text-gray-600 hover:text-gray-800">Fourth Link</a></li>
-            </nav>
-          </div>
-        </div>
+        
       </div>
     </footer>
 
