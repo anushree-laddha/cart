@@ -4,143 +4,438 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CART</title>
+    <title>CART - Your Cart</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+      .hero-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+      .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+      .nav-link {
+        position: relative;
+      }
+      .nav-link:after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -2px;
+        left: 0;
+        background-color: #ef4444;
+        transition: width 0.3s ease;
+      }
+      .nav-link:hover:after {
+        width: 100%;
+      }
+      .cart-item {
+        transition: all 0.3s ease;
+      }
+      .cart-item:hover {
+        background-color: #f8fafc;
+      }
+    </style>
   </head>
-  <body>
+  <body class="font-sans antialiased">
     <!-- Navbar -->
-    <div>
-      <header class="text-gray-600 body-font bg-purple-400">
-        <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-          <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-red-500 rounded-full" viewBox="0 0 24 24">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-            </svg>
-            <span class="ml-3 text-xl">CART</span>
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+      <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <div class="w-10 h-10 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center">
+            <i class="fas fa-shopping-cart text-white"></i>
+          </div>
+          <span class="text-xl font-bold text-gray-800">CART</span>
+        </div>
+        
+        <nav class="hidden md:flex space-x-8">
+          <a href="index.html" class="nav-link text-gray-600 hover:text-gray-900 font-medium">Home</a>
+          <a href="cart.html" class="nav-link text-gray-600 hover:text-gray-900 font-medium">Cart</a>
+          <a href="aboutus.html" class="nav-link text-gray-600 hover:text-gray-900 font-medium">About</a>
+          <a href="contactus.html" class="nav-link text-gray-600 hover:text-gray-900 font-medium">Contact</a>
+        </nav>
+        
+        <button onclick="logout()" class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2 rounded-full font-medium hover:shadow-lg transition-all duration-300">
+          Logout <i class="fas fa-sign-out-alt ml-1"></i>
+        </button>
+        
+        <!-- Mobile menu button -->
+        <button class="md:hidden text-gray-600">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Cart Header -->
+    <section class="hero-gradient text-white py-16">
+      <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">Your Shopping Cart</h1>
+        <p class="text-xl mb-8 max-w-2xl mx-auto">
+          Review your items before checkout
+        </p>
+        <div class="flex justify-center space-x-4">
+          <a href="index.html" class="bg-white text-purple-700 hover:bg-gray-100 font-semibold px-6 py-3 rounded-full transition duration-300">
+            Continue Shopping <i class="fas fa-arrow-left ml-2"></i>
           </a>
-          <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
-            <a class="mr-5 hover:text-gray-900" href="index.html">HOME</a>
-            <a class="mr-5 hover:text-gray-900" href="cart.html">CART</a>
-            <a class="mr-5 hover:text-gray-900" href="aboutus.html">ABOUT US</a>
-            <a class="mr-5 hover:text-gray-900" href="contactus.html">CONTACT US</a>
-          </nav>
-          <button id="logoutBtn" class="inline-flex items-center bg-red-500 text-white border-0 py-1 px-3 focus:outline-none hover:bg-red-700 rounded text-base mt-4 md:mt-0">
-            Logout
+          <button class="bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-3 rounded-full transition duration-300">
+            Proceed to Checkout <i class="fas fa-credit-card ml-2"></i>
           </button>
         </div>
-      </header>
-    </div>
+      </div>
+    </section>
 
-    <div class="customHeight bg-purple-400 customMargin">
-      <section class="text-gray-600 body-font">
-        <div class="container px-5 py-24 mx-auto">
-          <div class="flex flex-wrap -m-4">
-            <!-- Sample Cart Items -->
-            <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
-              <a class="block relative h-48 rounded overflow-hidden">
-                <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="https://images.unsplash.com/photo-1587131782738-de30ea91a542?ixlib=rb-4.0.3&auto=format&fit=crop&w=880&q=80">
-              </a>
-              <div class="mt-4">
-                <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">CATEGORY</h3>
-                <h2 class="text-gray-900 title-font text-lg font-medium">Cinnamon</h2>
-                <p class="mt-1">Rs. 100</p>
+    <!-- Cart Items Section -->
+    <section class="py-12 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <div class="grid md:grid-cols-4 gap-6">
+          <!-- Main Cart Items (3 columns) -->
+          <div class="md:col-span-3">
+            <div class="bg-white rounded-xl shadow-md overflow-hidden mb-6">
+              <div class="p-6 border-b border-gray-200">
+                <h2 class="text-2xl font-semibold text-gray-800">Your Items (8)</h2>
+              </div>
+              
+              <!-- Cart Items List -->
+              <div class="divide-y divide-gray-200">
+                <!-- Item 1 -->
+                <div class="cart-item p-6 flex flex-col md:flex-row">
+                  <div class="md:w-1/4 mb-4 md:mb-0">
+                    <img src="https://images.unsplash.com/photo-1587131782738-de30ea91a542?ixlib=rb-4.0.3&auto=format&fit=crop&w=880&q=80" 
+                         alt="Cinnamon" 
+                         class="w-full h-40 object-cover rounded-lg">
+                  </div>
+                  <div class="md:w-3/4 md:pl-6">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <h3 class="text-lg font-semibold text-gray-800">Cinnamon</h3>
+                        <p class="text-gray-500 text-sm">Spices</p>
+                      </div>
+                      <button class="text-red-500 hover:text-red-700">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                    <p class="text-gray-600 mt-2">Premium quality cinnamon sticks</p>
+                    <div class="flex items-center mt-4 justify-between">
+                      <div class="flex items-center border border-gray-300 rounded-full">
+                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-full">-</button>
+                        <span class="px-3">1</span>
+                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-full">+</button>
+                      </div>
+                      <span class="text-lg font-semibold text-gray-800">Rs. 100</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Item 2 -->
+                <div class="cart-item p-6 flex flex-col md:flex-row">
+                  <div class="md:w-1/4 mb-4 md:mb-0">
+                    <img src="https://images.unsplash.com/photo-1601597999907-c3bc3eff08ab?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" 
+                         alt="Coca Cola" 
+                         class="w-full h-40 object-cover rounded-lg">
+                  </div>
+                  <div class="md:w-3/4 md:pl-6">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <h3 class="text-lg font-semibold text-gray-800">Coca Cola</h3>
+                        <p class="text-gray-500 text-sm">Beverages</p>
+                      </div>
+                      <button class="text-red-500 hover:text-red-700">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                    <p class="text-gray-600 mt-2">Refreshing carbonated drink</p>
+                    <div class="flex items-center mt-4 justify-between">
+                      <div class="flex items-center border border-gray-300 rounded-full">
+                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-full">-</button>
+                        <span class="px-3">1</span>
+                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-full">+</button>
+                      </div>
+                      <span class="text-lg font-semibold text-gray-800">Rs. 20</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Item 3 -->
+                <div class="cart-item p-6 flex flex-col md:flex-row">
+                  <div class="md:w-1/4 mb-4 md:mb-0">
+                    <img src="https://images.unsplash.com/photo-1568983521157-e70347fac5fe?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80" 
+                         alt="Garlic" 
+                         class="w-full h-40 object-cover rounded-lg">
+                  </div>
+                  <div class="md:w-3/4 md:pl-6">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <h3 class="text-lg font-semibold text-gray-800">Garlic</h3>
+                        <p class="text-gray-500 text-sm">Vegetables</p>
+                      </div>
+                      <button class="text-red-500 hover:text-red-700">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                    <p class="text-gray-600 mt-2">Fresh garlic bulbs</p>
+                    <div class="flex items-center mt-4 justify-between">
+                      <div class="flex items-center border border-gray-300 rounded-full">
+                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-full">-</button>
+                        <span class="px-3">1</span>
+                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-full">+</button>
+                      </div>
+                      <span class="text-lg font-semibold text-gray-800">Rs. 60</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Item 4 -->
+                <div class="cart-item p-6 flex flex-col md:flex-row">
+                  <div class="md:w-1/4 mb-4 md:mb-0">
+                    <img src="https://images.unsplash.com/photo-1585735633320-d24595a213a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" 
+                         alt="Bread" 
+                         class="w-full h-40 object-cover rounded-lg">
+                  </div>
+                  <div class="md:w-3/4 md:pl-6">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <h3 class="text-lg font-semibold text-gray-800">Bread</h3>
+                        <p class="text-gray-500 text-sm">Bakery</p>
+                      </div>
+                      <button class="text-red-500 hover:text-red-700">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                    <p class="text-gray-600 mt-2">Fresh whole wheat bread</p>
+                    <div class="flex items-center mt-4 justify-between">
+                      <div class="flex items-center border border-gray-300 rounded-full">
+                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-full">-</button>
+                        <span class="px-3">1</span>
+                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-full">+</button>
+                      </div>
+                      <span class="text-lg font-semibold text-gray-800">Rs. 50</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Item 5 -->
+                <div class="cart-item p-6 flex flex-col md:flex-row">
+                  <div class="md:w-1/4 mb-4 md:mb-0">
+                    <img src="https://images.unsplash.com/photo-1506976785307-8732e854ad03?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1043&q=80" 
+                         alt="Eggs" 
+                         class="w-full h-40 object-cover rounded-lg">
+                  </div>
+                  <div class="md:w-3/4 md:pl-6">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <h3 class="text-lg font-semibold text-gray-800">Eggs</h3>
+                        <p class="text-gray-500 text-sm">Dairy</p>
+                      </div>
+                      <button class="text-red-500 hover:text-red-700">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                    <p class="text-gray-600 mt-2">Farm fresh eggs</p>
+                    <div class="flex items-center mt-4 justify-between">
+                      <div class="flex items-center border border-gray-300 rounded-full">
+                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-full">-</button>
+                        <span class="px-3">1</span>
+                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-full">+</button>
+                      </div>
+                      <span class="text-lg font-semibold text-gray-800">Rs. 50</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Item 6 -->
+                <div class="cart-item p-6 flex flex-col md:flex-row">
+                  <div class="md:w-1/4 mb-4 md:mb-0">
+                    <img src="https://images.unsplash.com/photo-1519405277839-34781a311ed3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzR8fGdyb2NlcnklMjBpdGVtc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60" 
+                         alt="Orange" 
+                         class="w-full h-40 object-cover rounded-lg">
+                  </div>
+                  <div class="md:w-3/4 md:pl-6">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <h3 class="text-lg font-semibold text-gray-800">Orange</h3>
+                        <p class="text-gray-500 text-sm">Fruits</p>
+                      </div>
+                      <button class="text-red-500 hover:text-red-700">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                    <p class="text-gray-600 mt-2">Juicy sweet oranges</p>
+                    <div class="flex items-center mt-4 justify-between">
+                      <div class="flex items-center border border-gray-300 rounded-full">
+                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-full">-</button>
+                        <span class="px-3">1</span>
+                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-full">+</button>
+                      </div>
+                      <span class="text-lg font-semibold text-gray-800">Rs. 70</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Item 7 -->
+                <div class="cart-item p-6 flex flex-col md:flex-row">
+                  <div class="md:w-1/4 mb-4 md:mb-0">
+                    <img src="https://images.unsplash.com/photo-1506617843518-6c600275f7b6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" 
+                         alt="Capsicum" 
+                         class="w-full h-40 object-cover rounded-lg">
+                  </div>
+                  <div class="md:w-3/4 md:pl-6">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <h3 class="text-lg font-semibold text-gray-800">Capsicum</h3>
+                        <p class="text-gray-500 text-sm">Vegetables</p>
+                      </div>
+                      <button class="text-red-500 hover:text-red-700">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                    <p class="text-gray-600 mt-2">Fresh green capsicum</p>
+                    <div class="flex items-center mt-4 justify-between">
+                      <div class="flex items-center border border-gray-300 rounded-full">
+                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-full">-</button>
+                        <span class="px-3">1</span>
+                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-full">+</button>
+                      </div>
+                      <span class="text-lg font-semibold text-gray-800">Rs. 30</span>
+                    </div>
+                  </div>
+                </div>
+                
+                <!-- Item 8 -->
+                <div class="cart-item p-6 flex flex-col md:flex-row">
+                  <div class="md:w-1/4 mb-4 md:mb-0">
+                    <img src="https://images.unsplash.com/photo-1510247548804-1a5c6f550b2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" 
+                         alt="Banana" 
+                         class="w-full h-40 object-cover rounded-lg">
+                  </div>
+                  <div class="md:w-3/4 md:pl-6">
+                    <div class="flex justify-between items-start">
+                      <div>
+                        <h3 class="text-lg font-semibold text-gray-800">Banana</h3>
+                        <p class="text-gray-500 text-sm">Fruits</p>
+                      </div>
+                      <button class="text-red-500 hover:text-red-700">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                    <p class="text-gray-600 mt-2">Ripe bananas</p>
+                    <div class="flex items-center mt-4 justify-between">
+                      <div class="flex items-center border border-gray-300 rounded-full">
+                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-full">-</button>
+                        <span class="px-3">1</span>
+                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-full">+</button>
+                      </div>
+                      <span class="text-lg font-semibold text-gray-800">Rs. 10</span>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
-      <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
-        <a class="block relative h-48 rounded overflow-hidden">
-          <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="https://images.unsplash.com/photo-1601597999907-c3bc3eff08ab?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80">
-        </a>
-        <div class="mt-4">
-          <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">CATEGORY</h3>
-          <h2 class="text-gray-900 title-font text-lg font-medium">Coca Cola</h2>
-          <p class="mt-1">Rs. 20</p>
+          </div>
+          
+          <!-- Order Summary (1 column) -->
+          <div class="md:col-span-1">
+            <div class="bg-white rounded-xl shadow-md p-6 sticky top-4">
+              <h2 class="text-xl font-semibold text-gray-800 mb-6">Order Summary</h2>
+              
+              <div class="space-y-4 mb-6">
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Subtotal (8 items)</span>
+                  <span class="font-medium">Rs. 390</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Shipping</span>
+                  <span class="font-medium">Rs. 40</span>
+                </div>
+                <div class="flex justify-between">
+                  <span class="text-gray-600">Tax</span>
+                  <span class="font-medium">Rs. 20</span>
+                </div>
+                <div class="border-t border-gray-200 pt-4 flex justify-between">
+                  <span class="text-lg font-semibold">Total</span>
+                  <span class="text-lg font-semibold">Rs. 450</span>
+                </div>
+              </div>
+              
+              <button class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-3 rounded-full font-semibold hover:shadow-lg transition duration-300">
+                Checkout <i class="fas fa-arrow-right ml-2"></i>
+              </button>
+              
+              <div class="mt-6">
+                <h3 class="text-sm font-semibold text-gray-600 mb-2">We accept</h3>
+                <div class="flex space-x-2">
+                  <div class="w-10 h-6 bg-gray-200 rounded flex items-center justify-center">
+                    <i class="fab fa-cc-visa text-blue-600"></i>
+                  </div>
+                  <div class="w-10 h-6 bg-gray-200 rounded flex items-center justify-center">
+                    <i class="fab fa-cc-mastercard text-red-600"></i>
+                  </div>
+                  <div class="w-10 h-6 bg-gray-200 rounded flex items-center justify-center">
+                    <i class="fab fa-cc-paypal text-blue-500"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
-        <a class="block relative h-48 rounded overflow-hidden">
-          <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="https://images.unsplash.com/photo-1568983521157-e70347fac5fe?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80">
-        </a>
-        <div class="mt-4">
-          <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">CATEGORY</h3>
-          <h2 class="text-gray-900 title-font text-lg font-medium">Garlic</h2>
-          <p class="mt-1">Rs. 60</p>
-        </div>
-      </div>
-      <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
-        <a class="block relative h-48 rounded overflow-hidden">
-          <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="https://images.unsplash.com/photo-1585735633320-d24595a213a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80">
-        </a>
-        <div class="mt-4">
-          <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">CATEGORY</h3>
-          <h2 class="text-gray-900 title-font text-lg font-medium">Bread</h2>
-          <p class="mt-1">Rs. 50</p>
-        </div>
-      </div>
-      <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
-        <a class="block relative h-48 rounded overflow-hidden">
-          <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="https://images.unsplash.com/photo-1506976785307-8732e854ad03?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1043&q=80">
-        </a>
-        <div class="mt-4">
-          <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">CATEGORY</h3>
-          <h2 class="text-gray-900 title-font text-lg font-medium">Eggs</h2>
-          <p class="mt-1">Rs. 50</p>
-        </div>
-      </div>
-      <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
-        <a class="block relative h-48 rounded overflow-hidden">
-          <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="https://images.unsplash.com/photo-1519405277839-34781a311ed3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzR8fGdyb2NlcnklMjBpdGVtc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60">
-        </a>
-        <div class="mt-4">
-          <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">CATEGORY</h3>
-          <h2 class="text-gray-900 title-font text-lg font-medium">Orange</h2>
-          <p class="mt-1">Rs. 70</p>
-        </div>
-      </div>
-      <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
-        <a class="block relative h-48 rounded overflow-hidden">
-          <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="https://images.unsplash.com/photo-1506617843518-6c600275f7b6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80">
-        </a>
-        <div class="mt-4">
-          <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">CATEGORY</h3>
-          <h2 class="text-gray-900 title-font text-lg font-medium">Capsicum</h2>
-          <p class="mt-1">Rs. 30</p>
-        </div>
-      </div>
-      <div class="lg:w-1/4 md:w-1/2 p-4 w-full">
-        <a class="block relative h-48 rounded overflow-hidden">
-          <img alt="ecommerce" class="object-cover object-center w-full h-full block" src="https://images.unsplash.com/photo-1510247548804-1a5c6f550b2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80">
-        </a>
-        <div class="mt-4">
-          <h3 class="text-gray-500 text-xs tracking-widest title-font mb-1">CATEGORY</h3>
-          <h2 class="text-gray-900 title-font text-lg font-medium">Banana</h2>
-          <p class="mt-1">Rs. 10</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-    </div>
+    </section>
 
     <!-- Footer -->
-    <footer class="text-black-600 body-font bg-purple-400 py-10">
-      <div class="container px-5 py-24 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
-        <div class="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
-          <a class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-10 h-10 text-white p-2 bg-red-500 rounded-full" viewBox="0 0 24 24">
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-            </svg>
-          </a>
-          <p class="mt-2 text-sm text-black-500">Your go-to store for fresh groceries.</p>
+    <footer class="bg-gray-900 text-gray-300 py-12">
+      <div class="container mx-auto px-4">
+        <div class="grid md:grid-cols-4 gap-8">
+          <div>
+            <div class="flex items-center space-x-2 mb-4">
+              <div class="w-10 h-10 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center">
+                <i class="fas fa-shopping-cart text-white"></i>
+              </div>
+              <span class="text-xl font-bold text-white">CART</span>
+            </div>
+            <p class="mb-4">
+              Your one-stop shop for all grocery needs.
+            </p>
+            <div class="flex space-x-4">
+              <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+            </div>
+          </div>
+          
+          <div>
+            <h3 class="text-white font-semibold text-lg mb-4">Quick Links</h3>
+            <ul class="space-y-2">
+              <li><a href="index.html" class="hover:text-white transition">Home</a></li>
+              <li><a href="cart.html" class="hover:text-white transition">Your Cart</a></li>
+              <li><a href="aboutus.html" class="hover:text-white transition">About Us</a></li>
+              <li><a href="contactus.html" class="hover:text-white transition">Contact</a></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 class="text-white font-semibold text-lg mb-4">Help & Info</h3>
+            <ul class="space-y-2">
+              <li><a href="#" class="hover:text-white transition">FAQs</a></li>
+              <li><a href="#" class="hover:text-white transition">Shipping Info</a></li>
+              <li><a href="#" class="hover:text-white transition">Returns Policy</a></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 class="text-white font-semibold text-lg mb-4">Contact Us</h3>
+            <p class="mb-2"><i class="fas fa-map-marker-alt mr-2"></i>2B, City road, Pune</p>
+            <p class="mb-2"><i class="fas fa-phone mr-2"></i>7878787878</p>
+            <p><i class="fas fa-envelope mr-2"></i> xyzcarta@gmail.com</p>
+          </div>
         </div>
-      </div>
     </footer>
 
     <script>
-      document.getElementById('logoutBtn').addEventListener('click', function() {
+      function logout() {
         alert('You have been logged out. Redirecting to login page...');
         window.location.href = 'login.html';
-      });
+      }
     </script>
   </body>
 </html>
