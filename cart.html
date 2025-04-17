@@ -4,16 +4,14 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CART - Your Cart</title>
+    <title>CART - Your Shopping Cart</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="module" src="firebaseauth.js"></script>
+    <script type="module" src="app.js" defer></script>
     <style>
       .hero-gradient {
         background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      }
-      .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
       }
       .nav-link {
         position: relative;
@@ -31,11 +29,9 @@
       .nav-link:hover:after {
         width: 100%;
       }
-      .cart-item {
-        transition: all 0.3s ease;
-      }
       .cart-item:hover {
-        background-color: #f8fafc;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
       }
     </style>
   </head>
@@ -52,14 +48,22 @@
         
         <nav class="hidden md:flex space-x-8">
           <a href="home.html" class="nav-link text-gray-600 hover:text-gray-900 font-medium">Home</a>
+          <a href="items.html" class="nav-link text-gray-600 hover:text-gray-900 font-medium">Products</a>
           <a href="cart.html" class="nav-link text-gray-600 hover:text-gray-900 font-medium">Cart</a>
           <a href="aboutus.html" class="nav-link text-gray-600 hover:text-gray-900 font-medium">About</a>
           <a href="contactus.html" class="nav-link text-gray-600 hover:text-gray-900 font-medium">Contact</a>
         </nav>
         
-        <button onclick="logout()" class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2 rounded-full font-medium hover:shadow-lg transition-all duration-300">
-          Logout <i class="fas fa-sign-out-alt ml-1"></i>
-        </button>
+        <div class="flex items-center space-x-4">
+          <a href="cart.html" class="relative">
+            <i class="fas fa-shopping-cart text-gray-600 text-xl"></i>
+            <span class="cart-count absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">0</span>
+          </a>
+          <span id="userGreeting" class="hidden md:block text-gray-600"></span>
+          <button onclick="logout()" class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2 rounded-full font-medium hover:shadow-lg transition-all duration-300">
+            Logout <i class="fas fa-sign-out-alt ml-1"></i>
+          </button>
+        </div>
         
         <!-- Mobile menu button -->
         <button class="md:hidden text-gray-600">
@@ -69,312 +73,68 @@
     </header>
 
     <!-- Cart Header -->
-    <section class="hero-gradient text-white py-16">
-      <div class="container mx-auto px-4 text-center">
-        <h1 class="text-4xl md:text-5xl font-bold mb-6">Your Shopping Cart</h1>
-        <p class="text-xl mb-8 max-w-2xl mx-auto">
-          Review your items before checkout
-        </p>
-        <div class="flex justify-center space-x-4">
-          <a href="home.html" class="bg-white text-purple-700 hover:bg-gray-100 font-semibold px-6 py-3 rounded-full transition duration-300">
-            Continue Shopping <i class="fas fa-arrow-left ml-2"></i>
-          </a>
-          <button class="bg-green-500 hover:bg-green-600 text-white font-semibold px-6 py-3 rounded-full transition duration-300">
-            Proceed to Checkout <i class="fas fa-credit-card ml-2"></i>
-          </button>
-        </div>
+    <section class="hero-gradient text-white py-12">
+      <div class="container mx-auto px-4">
+        <h1 class="text-4xl md:text-5xl font-bold mb-4">Your Shopping Cart</h1>
+        <p class="text-xl">Review and checkout your items</p>
       </div>
     </section>
 
-    <!-- Cart Items Section -->
+    <!-- Cart Content -->
     <section class="py-12 bg-gray-50">
       <div class="container mx-auto px-4">
-        <div class="grid md:grid-cols-4 gap-6">
-          <!-- Main Cart Items (3 columns) -->
-          <div class="md:col-span-3">
-            <div class="bg-white rounded-xl shadow-md overflow-hidden mb-6">
+        <div class="flex flex-col lg:flex-row gap-8">
+          <!-- Cart Items -->
+          <div class="lg:w-2/3">
+            <div class="bg-white rounded-xl shadow overflow-hidden">
               <div class="p-6 border-b border-gray-200">
-                <h2 class="text-2xl font-semibold text-gray-800">Your Items (8)</h2>
+                <h2 class="text-xl font-semibold text-gray-800">Cart Items</h2>
               </div>
               
-              <!-- Cart Items List -->
-              <div class="divide-y divide-gray-200">
-                <!-- Item 1 -->
-                <div class="cart-item p-6 flex flex-col md:flex-row">
-                  <div class="md:w-1/4 mb-4 md:mb-0">
-                    <img src="https://images.unsplash.com/photo-1587131782738-de30ea91a542?ixlib=rb-4.0.3&auto=format&fit=crop&w=880&q=80" 
-                         alt="Cinnamon" 
-                         class="w-full h-40 object-cover rounded-lg">
-                  </div>
-                  <div class="md:w-3/4 md:pl-6">
-                    <div class="flex justify-between items-start">
-                      <div>
-                        <h3 class="text-lg font-semibold text-gray-800">Cinnamon</h3>
-                        <p class="text-gray-500 text-sm">Spices</p>
-                      </div>
-                      <button class="text-red-500 hover:text-red-700">
-                        <i class="fas fa-trash"></i>
-                      </button>
-                    </div>
-                    <p class="text-gray-600 mt-2">Premium quality cinnamon sticks</p>
-                    <div class="flex items-center mt-4 justify-between">
-                      <div class="flex items-center border border-gray-300 rounded-full">
-                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-full">-</button>
-                        <span class="px-3">1</span>
-                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-full">+</button>
-                      </div>
-                      <span class="text-lg font-semibold text-gray-800">Rs. 100</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <!-- Item 2 -->
-                <div class="cart-item p-6 flex flex-col md:flex-row">
-                  <div class="md:w-1/4 mb-4 md:mb-0">
-                    <img src="https://images.unsplash.com/photo-1601597999907-c3bc3eff08ab?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" 
-                         alt="Coca Cola" 
-                         class="w-full h-40 object-cover rounded-lg">
-                  </div>
-                  <div class="md:w-3/4 md:pl-6">
-                    <div class="flex justify-between items-start">
-                      <div>
-                        <h3 class="text-lg font-semibold text-gray-800">Coca Cola</h3>
-                        <p class="text-gray-500 text-sm">Beverages</p>
-                      </div>
-                      <button class="text-red-500 hover:text-red-700">
-                        <i class="fas fa-trash"></i>
-                      </button>
-                    </div>
-                    <p class="text-gray-600 mt-2">Refreshing carbonated drink</p>
-                    <div class="flex items-center mt-4 justify-between">
-                      <div class="flex items-center border border-gray-300 rounded-full">
-                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-full">-</button>
-                        <span class="px-3">1</span>
-                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-full">+</button>
-                      </div>
-                      <span class="text-lg font-semibold text-gray-800">Rs. 20</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <!-- Item 3 -->
-                <div class="cart-item p-6 flex flex-col md:flex-row">
-                  <div class="md:w-1/4 mb-4 md:mb-0">
-                    <img src="https://images.unsplash.com/photo-1568983521157-e70347fac5fe?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=735&q=80" 
-                         alt="Garlic" 
-                         class="w-full h-40 object-cover rounded-lg">
-                  </div>
-                  <div class="md:w-3/4 md:pl-6">
-                    <div class="flex justify-between items-start">
-                      <div>
-                        <h3 class="text-lg font-semibold text-gray-800">Garlic</h3>
-                        <p class="text-gray-500 text-sm">Vegetables</p>
-                      </div>
-                      <button class="text-red-500 hover:text-red-700">
-                        <i class="fas fa-trash"></i>
-                      </button>
-                    </div>
-                    <p class="text-gray-600 mt-2">Fresh garlic bulbs</p>
-                    <div class="flex items-center mt-4 justify-between">
-                      <div class="flex items-center border border-gray-300 rounded-full">
-                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-full">-</button>
-                        <span class="px-3">1</span>
-                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-full">+</button>
-                      </div>
-                      <span class="text-lg font-semibold text-gray-800">Rs. 60</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <!-- Item 4 -->
-                <div class="cart-item p-6 flex flex-col md:flex-row">
-                  <div class="md:w-1/4 mb-4 md:mb-0">
-                    <img src="https://images.unsplash.com/photo-1585735633320-d24595a213a1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" 
-                         alt="Bread" 
-                         class="w-full h-40 object-cover rounded-lg">
-                  </div>
-                  <div class="md:w-3/4 md:pl-6">
-                    <div class="flex justify-between items-start">
-                      <div>
-                        <h3 class="text-lg font-semibold text-gray-800">Bread</h3>
-                        <p class="text-gray-500 text-sm">Bakery</p>
-                      </div>
-                      <button class="text-red-500 hover:text-red-700">
-                        <i class="fas fa-trash"></i>
-                      </button>
-                    </div>
-                    <p class="text-gray-600 mt-2">Fresh whole wheat bread</p>
-                    <div class="flex items-center mt-4 justify-between">
-                      <div class="flex items-center border border-gray-300 rounded-full">
-                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-full">-</button>
-                        <span class="px-3">1</span>
-                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-full">+</button>
-                      </div>
-                      <span class="text-lg font-semibold text-gray-800">Rs. 50</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <!-- Item 5 -->
-                <div class="cart-item p-6 flex flex-col md:flex-row">
-                  <div class="md:w-1/4 mb-4 md:mb-0">
-                    <img src="https://images.unsplash.com/photo-1506976785307-8732e854ad03?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1043&q=80" 
-                         alt="Eggs" 
-                         class="w-full h-40 object-cover rounded-lg">
-                  </div>
-                  <div class="md:w-3/4 md:pl-6">
-                    <div class="flex justify-between items-start">
-                      <div>
-                        <h3 class="text-lg font-semibold text-gray-800">Eggs</h3>
-                        <p class="text-gray-500 text-sm">Dairy</p>
-                      </div>
-                      <button class="text-red-500 hover:text-red-700">
-                        <i class="fas fa-trash"></i>
-                      </button>
-                    </div>
-                    <p class="text-gray-600 mt-2">Farm fresh eggs</p>
-                    <div class="flex items-center mt-4 justify-between">
-                      <div class="flex items-center border border-gray-300 rounded-full">
-                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-full">-</button>
-                        <span class="px-3">1</span>
-                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-full">+</button>
-                      </div>
-                      <span class="text-lg font-semibold text-gray-800">Rs. 50</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <!-- Item 6 -->
-                <div class="cart-item p-6 flex flex-col md:flex-row">
-                  <div class="md:w-1/4 mb-4 md:mb-0">
-                    <img src="https://images.unsplash.com/photo-1519405277839-34781a311ed3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzR8fGdyb2NlcnklMjBpdGVtc3xlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60" 
-                         alt="Orange" 
-                         class="w-full h-40 object-cover rounded-lg">
-                  </div>
-                  <div class="md:w-3/4 md:pl-6">
-                    <div class="flex justify-between items-start">
-                      <div>
-                        <h3 class="text-lg font-semibold text-gray-800">Orange</h3>
-                        <p class="text-gray-500 text-sm">Fruits</p>
-                      </div>
-                      <button class="text-red-500 hover:text-red-700">
-                        <i class="fas fa-trash"></i>
-                      </button>
-                    </div>
-                    <p class="text-gray-600 mt-2">Juicy sweet oranges</p>
-                    <div class="flex items-center mt-4 justify-between">
-                      <div class="flex items-center border border-gray-300 rounded-full">
-                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-full">-</button>
-                        <span class="px-3">1</span>
-                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-full">+</button>
-                      </div>
-                      <span class="text-lg font-semibold text-gray-800">Rs. 70</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <!-- Item 7 -->
-                <div class="cart-item p-6 flex flex-col md:flex-row">
-                  <div class="md:w-1/4 mb-4 md:mb-0">
-                    <img src="https://images.unsplash.com/photo-1506617843518-6c600275f7b6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" 
-                         alt="Capsicum" 
-                         class="w-full h-40 object-cover rounded-lg">
-                  </div>
-                  <div class="md:w-3/4 md:pl-6">
-                    <div class="flex justify-between items-start">
-                      <div>
-                        <h3 class="text-lg font-semibold text-gray-800">Capsicum</h3>
-                        <p class="text-gray-500 text-sm">Vegetables</p>
-                      </div>
-                      <button class="text-red-500 hover:text-red-700">
-                        <i class="fas fa-trash"></i>
-                      </button>
-                    </div>
-                    <p class="text-gray-600 mt-2">Fresh green capsicum</p>
-                    <div class="flex items-center mt-4 justify-between">
-                      <div class="flex items-center border border-gray-300 rounded-full">
-                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-full">-</button>
-                        <span class="px-3">1</span>
-                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-full">+</button>
-                      </div>
-                      <span class="text-lg font-semibold text-gray-800">Rs. 30</span>
-                    </div>
-                  </div>
-                </div>
-                
-                <!-- Item 8 -->
-                <div class="cart-item p-6 flex flex-col md:flex-row">
-                  <div class="md:w-1/4 mb-4 md:mb-0">
-                    <img src="https://images.unsplash.com/photo-1510247548804-1a5c6f550b2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80" 
-                         alt="Banana" 
-                         class="w-full h-40 object-cover rounded-lg">
-                  </div>
-                  <div class="md:w-3/4 md:pl-6">
-                    <div class="flex justify-between items-start">
-                      <div>
-                        <h3 class="text-lg font-semibold text-gray-800">Banana</h3>
-                        <p class="text-gray-500 text-sm">Fruits</p>
-                      </div>
-                      <button class="text-red-500 hover:text-red-700">
-                        <i class="fas fa-trash"></i>
-                      </button>
-                    </div>
-                    <p class="text-gray-600 mt-2">Ripe bananas</p>
-                    <div class="flex items-center mt-4 justify-between">
-                      <div class="flex items-center border border-gray-300 rounded-full">
-                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-l-full">-</button>
-                        <span class="px-3">1</span>
-                        <button class="px-3 py-1 text-gray-600 hover:bg-gray-100 rounded-r-full">+</button>
-                      </div>
-                      <span class="text-lg font-semibold text-gray-800">Rs. 10</span>
-                    </div>
-                  </div>
+              <div id="cart-items-container" class="divide-y divide-gray-200">
+                <!-- Cart items will be loaded here -->
+                <div class="p-8 text-center">
+                  <i class="fas fa-shopping-cart text-gray-300 text-5xl mb-4"></i>
+                  <h3 class="text-xl font-semibold text-gray-700 mb-2">Your cart is empty</h3>
+                  <p class="text-gray-500 mb-4">Start shopping to add items to your cart</p>
+                  <a href="items.html" class="inline-block bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-2 rounded-lg font-medium hover:shadow-lg transition duration-300">
+                    Browse Products
+                  </a>
                 </div>
               </div>
             </div>
           </div>
           
-          <!-- Order Summary (1 column) -->
-          <div class="md:col-span-1">
-            <div class="bg-white rounded-xl shadow-md p-6 sticky top-4">
-              <h2 class="text-xl font-semibold text-gray-800 mb-6">Order Summary</h2>
+          <!-- Order Summary -->
+          <div class="lg:w-1/3">
+            <div class="bg-white rounded-xl shadow overflow-hidden sticky top-4">
+              <div class="p-6 border-b border-gray-200">
+                <h2 class="text-xl font-semibold text-gray-800">Order Summary</h2>
+              </div>
               
-              <div class="space-y-4 mb-6">
-                <div class="flex justify-between">
-                  <span class="text-gray-600">Subtotal (8 items)</span>
-                  <span class="font-medium">Rs. 390</span>
+              <div class="p-6">
+                <div class="flex justify-between mb-2">
+                  <span class="text-gray-600">Subtotal</span>
+                  <span id="subtotal" class="font-medium">Rs. 0</span>
                 </div>
-                <div class="flex justify-between">
+                <div class="flex justify-between mb-2">
                   <span class="text-gray-600">Shipping</span>
                   <span class="font-medium">Rs. 40</span>
                 </div>
-                <div class="flex justify-between">
-                  <span class="text-gray-600">Tax</span>
-                  <span class="font-medium">Rs. 20</span>
+                <div class="flex justify-between mb-4">
+                  <span class="text-gray-600">Tax (5%)</span>
+                  <span id="tax" class="font-medium">Rs. 0</span>
                 </div>
-                <div class="border-t border-gray-200 pt-4 flex justify-between">
-                  <span class="text-lg font-semibold">Total</span>
-                  <span class="text-lg font-semibold">Rs. 450</span>
-                </div>
-              </div>
-              
-              <button class="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-3 rounded-full font-semibold hover:shadow-lg transition duration-300">
-                Checkout <i class="fas fa-arrow-right ml-2"></i>
-              </button>
-              
-              <div class="mt-6">
-                <h3 class="text-sm font-semibold text-gray-600 mb-2">We accept</h3>
-                <div class="flex space-x-2">
-                  <div class="w-10 h-6 bg-gray-200 rounded flex items-center justify-center">
-                    <i class="fab fa-cc-visa text-blue-600"></i>
-                  </div>
-                  <div class="w-10 h-6 bg-gray-200 rounded flex items-center justify-center">
-                    <i class="fab fa-cc-mastercard text-red-600"></i>
-                  </div>
-                  <div class="w-10 h-6 bg-gray-200 rounded flex items-center justify-center">
-                    <i class="fab fa-cc-paypal text-blue-500"></i>
+                <div class="border-t border-gray-200 pt-4 mb-6">
+                  <div class="flex justify-between">
+                    <span class="text-lg font-semibold">Total</span>
+                    <span id="total" class="text-lg font-bold text-purple-700">Rs. 0</span>
                   </div>
                 </div>
+                
+                <button id="checkout-btn" onclick="checkout()" class="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white py-3 px-4 rounded-lg font-semibold hover:from-purple-700 hover:to-purple-800 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                  Proceed to Checkout
+                </button>
               </div>
             </div>
           </div>
@@ -394,12 +154,13 @@
               <span class="text-xl font-bold text-white">CART</span>
             </div>
             <p class="mb-4">
-              Your one-stop shop for all grocery needs.
+              Making online shopping simpler, faster, and more enjoyable.
             </p>
             <div class="flex space-x-4">
               <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
               <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
               <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin-in"></i></a>
             </div>
           </div>
           
@@ -407,6 +168,7 @@
             <h3 class="text-white font-semibold text-lg mb-4">Quick Links</h3>
             <ul class="space-y-2">
               <li><a href="home.html" class="hover:text-white transition">Home</a></li>
+              <li><a href="items.html" class="hover:text-white transition">Products</a></li>
               <li><a href="cart.html" class="hover:text-white transition">Your Cart</a></li>
               <li><a href="aboutus.html" class="hover:text-white transition">About Us</a></li>
               <li><a href="contactus.html" class="hover:text-white transition">Contact</a></li>
@@ -419,6 +181,7 @@
               <li><a href="#" class="hover:text-white transition">FAQs</a></li>
               <li><a href="#" class="hover:text-white transition">Shipping Info</a></li>
               <li><a href="#" class="hover:text-white transition">Returns Policy</a></li>
+              <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
             </ul>
           </div>
           
@@ -429,12 +192,147 @@
             <p><i class="fas fa-envelope mr-2"></i> xyzcarta@gmail.com</p>
           </div>
         </div>
+      </div>
     </footer>
 
     <script>
-      function logout() {
-        alert('You have been logged out. Redirecting to login page...');
-        window.location.href = 'index.html';
+      window.updateQuantity = updateQuantity;
+      window.removeFromCart = removeFromCart;
+      window.loadCartItems = loadCartItems;
+      window.checkout = checkout;
+    
+      document.addEventListener('DOMContentLoaded', function () {
+        loadCartItems();
+        updateCartCount();
+      });
+    
+      function loadCartItems() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const cartContainer = document.getElementById('cart-items-container');
+        const subtotalElement = document.getElementById('subtotal');
+        const taxElement = document.getElementById('tax');
+        const totalElement = document.getElementById('total');
+        const checkoutBtn = document.getElementById('checkout-btn');
+    
+        if (cart.length === 0) {
+          cartContainer.innerHTML = `
+            <div class="p-8 text-center">
+              <i class="fas fa-shopping-cart text-gray-300 text-5xl mb-4"></i>
+              <h3 class="text-xl font-semibold text-gray-700 mb-2">Your cart is empty</h3>
+              <p class="text-gray-500 mb-4">Start shopping to add items to your cart</p>
+              <a href="items.html" class="inline-block bg-gradient-to-r from-purple-600 to-purple-700 text-white px-6 py-2 rounded-lg font-medium hover:shadow-lg transition duration-300">
+                Browse Products
+              </a>
+            </div>
+          `;
+          subtotalElement.textContent = 'Rs. 0';
+          taxElement.textContent = 'Rs. 0';
+          totalElement.textContent = 'Rs. 0';
+          checkoutBtn.disabled = true;
+          return;
+        }
+    
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const tax = subtotal * 0.05;
+        const shipping = 40;
+        const total = subtotal + tax + shipping;
+    
+        subtotalElement.textContent = `Rs. ${subtotal.toFixed(2)}`;
+        taxElement.textContent = `Rs. ${tax.toFixed(2)}`;
+        totalElement.textContent = `Rs. ${total.toFixed(2)}`;
+        checkoutBtn.disabled = false;
+    
+        cartContainer.innerHTML = '';
+        cart.forEach(item => {
+          const itemElement = document.createElement('div');
+          itemElement.className = 'cart-item p-6 transition duration-300';
+          itemElement.innerHTML = `
+            <div class="flex items-start space-x-4">
+              <div class="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden">
+                <img src="${item.image}" alt="${item.name}" class="w-full h-full object-cover">
+              </div>
+              <div class="flex-1">
+                <div class="flex justify-between">
+                  <h3 class="font-medium text-gray-800">${item.name}</h3>
+                  <button onclick="removeFromCart('${item.id}')" class="text-gray-400 hover:text-red-500">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+                <p class="text-sm text-gray-500 capitalize">${item.category}</p>
+                <div class="flex justify-between items-center mt-2">
+                  <div class="flex items-center border border-gray-300 rounded-lg overflow-hidden">
+                    <button onclick="updateQuantity('${item.id}', ${item.quantity - 1})" class="px-3 py-1 bg-gray-100 text-gray-600 hover:bg-gray-200 ${item.quantity <= 1 ? 'opacity-50 cursor-not-allowed' : ''}">
+                      <i class="fas fa-minus"></i>
+                    </button>
+                    <span class="px-4">${item.quantity}</span>
+                    <button onclick="updateQuantity('${item.id}', ${item.quantity + 1})" class="px-3 py-1 bg-gray-100 text-gray-600 hover:bg-gray-200">
+                      <i class="fas fa-plus"></i>
+                    </button>
+                  </div>
+                  <span class="font-medium">Rs. ${(item.price * item.quantity).toFixed(2)}</span>
+                </div>
+              </div>
+            </div>
+          `;
+          cartContainer.appendChild(itemElement);
+        });
+      }
+    
+      function updateQuantity(productId, newQuantity) {
+        if (newQuantity < 1) return;
+    
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const itemIndex = cart.findIndex(item => String(item.id) === String(productId));
+    
+        if (itemIndex > -1) {
+          cart[itemIndex].quantity = newQuantity;
+          localStorage.setItem('cart', JSON.stringify(cart));
+          updateCartCount();
+          loadCartItems();
+          showToast('Cart updated');
+        }
+      }
+    
+      function removeFromCart(productId) {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const updatedCart = cart.filter(item => String(item.id) !== String(productId));
+        localStorage.setItem('cart', JSON.stringify(updatedCart));
+        updateCartCount();
+        loadCartItems();
+        showToast('Item removed from cart');
+      }
+    
+      function updateCartCount() {
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+        const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const cartCount = document.querySelector('.cart-count');
+        if (cartCount) {
+          cartCount.textContent = count;
+        }
+      }
+    
+      function checkout() {
+        const user = JSON.parse(localStorage.getItem('user'));
+        const cart = JSON.parse(localStorage.getItem('cart')) || [];
+    
+        if (!user) {
+          showToast('Please login to checkout', false);
+          return;
+        }
+    
+        if (cart.length === 0) {
+          showToast('Your cart is empty', false);
+          return;
+        }
+    
+        showToast('Order placed successfully!');
+        localStorage.removeItem('cart');
+        updateCartCount();
+        loadCartItems();
+      }
+    
+      function showToast(message, success = true) {
+        alert(message);
       }
     </script>
   </body>
