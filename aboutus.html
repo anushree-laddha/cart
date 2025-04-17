@@ -4,104 +4,208 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CART</title>
+    <title>CART - About Us</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="module" src="firebaseauth.js"></script>
+    <script type="module" src="app.js" defer></script>
+    <style>
+      .hero-gradient {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+      .nav-link {
+        position: relative;
+      }
+      .nav-link:after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -2px;
+        left: 0;
+        background-color: #ef4444;
+        transition: width 0.3s ease;
+      }
+      .nav-link:hover:after {
+        width: 100%;
+      }
+      .team-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      }
+    </style>
   </head>
-  <body>
+  <body class="font-sans antialiased">
     <!-- Navbar -->
-    <div>
-      <header class="text-gray-600 body-font bg-purple-400">
-        <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-          <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              class="w-10 h-10 text-white p-2 bg-red-500 rounded-full"
-              viewBox="0 0 24 24"
-            >
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-            </svg>
-            <span class="ml-3 text-xl">CART</span>
+    <header class="bg-white shadow-sm sticky top-0 z-50">
+      <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+        <div class="flex items-center space-x-2">
+          <div class="w-10 h-10 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center">
+            <i class="fas fa-shopping-cart text-white"></i>
+          </div>
+          <span class="text-xl font-bold text-gray-800">CART</span>
+        </div>
+        
+        <nav class="hidden md:flex space-x-8">
+          <a href="home.html" class="nav-link text-gray-600 hover:text-gray-900 font-medium">Home</a>
+          <a href="items.html" class="nav-link text-gray-600 hover:text-gray-900 font-medium">Products</a>
+          <a href="cart.html" class="nav-link text-gray-600 hover:text-gray-900 font-medium">Cart</a>
+          <a href="aboutus.html" class="nav-link text-gray-600 hover:text-gray-900 font-medium">About</a>
+          <a href="contactus.html" class="nav-link text-gray-600 hover:text-gray-900 font-medium">Contact</a>
+        </nav>
+        
+        <div class="flex items-center space-x-4">
+          <a href="cart.html" class="relative">
+            <i class="fas fa-shopping-cart text-gray-600 text-xl"></i>
+            <span class="cart-count absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">0</span>
           </a>
-          <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
-            <a class="mr-5 hover:text-gray-900" href="home.html">HOME</a>
-            <a class="mr-5 hover:text-gray-900" href="cart.html">CART</a>
-            <a class="mr-5 hover:text-gray-900" href="aboutus.html">ABOUT US</a>
-            <a class="mr-5 hover:text-gray-900" href="contactus.html">CONTACT US</a>
-          </nav>
-          <button
-            onclick="logout()"
-            class="inline-flex items-center bg-gray-100 border-0 py-1 px-3 focus:outline-none hover:bg-gray-200 rounded text-base mt-4 md:mt-0"
-          >
-            Logout
-            <svg
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              class="w-4 h-4 ml-1"
-              viewBox="0 0 24 24"
-            >
-              <path d="M5 12h14M12 5l7 7-7 7"></path>
-            </svg>
+          <span id="userGreeting" class="hidden md:block text-gray-600"></span>
+          <button onclick="logout()" class="bg-gradient-to-r from-red-500 to-pink-500 text-white px-4 py-2 rounded-full font-medium hover:shadow-lg transition-all duration-300">
+            Logout <i class="fas fa-sign-out-alt ml-1"></i>
           </button>
         </div>
-      </header>
-    </div>
+        
+        <!-- Mobile menu button -->
+        <button class="md:hidden text-gray-600">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+      </div>
+    </header>
 
-    <!-- Main Content -->
-    <div class="customHeight bg-purple-400">
-      <section class="text-gray-600 body-font">
-        <div class="container px-5 py-24 mx-auto">
-          <div class="xl:w-1/2 lg:w-3/4 w-full mx-auto text-center">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="currentColor" class="inline-block w-8 h-8 text-gray-400 mb-8" viewBox="0 0 975.036 975.036">
-              <path d="M925.036 57.197h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.399 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l36 76c11.6 24.399 40.3 35.1 65.1 24.399 66.2-28.6 122.101-64.8 167.7-108.8 55.601-53.7 93.7-114.3 114.3-181.9 20.601-67.6 30.9-159.8 30.9-276.8v-239c0-27.599-22.401-50-50-50zM106.036 913.497c65.4-28.5 121-64.699 166.9-108.6 56.1-53.7 94.4-114.1 115-181.2 20.6-67.1 30.899-159.6 30.899-277.5v-239c0-27.6-22.399-50-50-50h-304c-27.6 0-50 22.4-50 50v304c0 27.601 22.4 50 50 50h145.5c-1.9 79.601-20.4 143.3-55.4 191.2-27.6 37.8-69.4 69.1-125.3 93.8-25.7 11.3-36.8 41.7-24.8 67.101l35.9 75.8c11.601 24.399 40.501 35.2 65.301 24.399z"></path>
-            </svg>
-            <p class="leading-relaxed text-lg">Welcome to CART, where shopping is made seamless and convenient! Our cart system is designed to enhance your online shopping experience with a user-friendly interface, real-time updates, and a secure checkout process. Whether you're a business looking to optimize sales or a shopper wanting a hassle-free journey, we've got you covered.
+    <!-- About Header -->
+    <section class="hero-gradient text-white py-12">
+      <div class="container mx-auto px-4 text-center">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">About Us</h1>
+        <p class="text-xl max-w-2xl mx-auto">
+          Learn more about our mission to make grocery shopping simple and enjoyable
+        </p>
+      </div>
+    </section>
 
-              At CART, we prioritize efficiency, reliability, and customer satisfaction. Our goal is to simplify e-commerce with a smart, intuitive cart that adapts to your needs. Join us in revolutionizing the way you shop!
-              
-              </p>
+    <!-- Our Story -->
+    <section class="py-16 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center gap-12">
+          <div class="md:w-1/2">
+            <img src="https://images.unsplash.com/photo-1556740738-b6a63e27c4df?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" 
+                 alt="Our team" 
+                 class="rounded-xl shadow-lg w-full">
+          </div>
+          <div class="md:w-1/2">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6">Our Story</h2>
+            <p class="text-gray-600 mb-4">
+              Founded in 2023, CART began with a simple idea: to make grocery shopping as effortless as possible. 
+              We noticed how time-consuming and frustrating traditional grocery shopping could be, and we set out to change that.
+            </p>
+            <p class="text-gray-600 mb-4">
+              Our platform combines the convenience of online shopping with smart features that help you discover new products, 
+              remember your favorites, and checkout in seconds.
+            </p>
+            <p class="text-gray-600">
+              Today, we serve thousands of happy customers across Pune, with plans to expand nationwide. 
+              Our commitment to quality, convenience, and customer satisfaction remains at the heart of everything we do.
+            </p>
           </div>
         </div>
-      </section>
-    </div>
+      </div>
+    </section>
+
+    <!-- Our Values -->
+    <section class="py-16 bg-gray-50">
+      <div class="container mx-auto px-4">
+        <div class="text-center mb-16">
+          <h2 class="text-3xl font-bold text-gray-800 mb-4">Our Values</h2>
+        </div>
+        
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="bg-white p-8 rounded-xl shadow-md">
+            <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center mb-6">
+              <i class="fas fa-heart text-red-500 text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-3 text-gray-800">Customer First</h3>
+          </div>
+          
+          <div class="bg-white p-8 rounded-xl shadow-md">
+            <div class="w-14 h-14 bg-blue-100 rounded-full flex items-center justify-center mb-6">
+              <i class="fas fa-lightbulb text-blue-500 text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-3 text-gray-800">Innovation</h3>
+          </div>
+          
+          <div class="bg-white p-8 rounded-xl shadow-md">
+            <div class="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-6">
+              <i class="fas fa-hand-holding-heart text-green-500 text-xl"></i>
+            </div>
+            <h3 class="text-xl font-semibold mb-3 text-gray-800">Integrity</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+      <div class="container mx-auto px-4 text-center">
+        <h2 class="text-3xl font-bold mb-6">Ready to Experience Better Shopping?</h2>
+        <p class="text-xl mb-8 max-w-2xl mx-auto">
+          Join thousands of happy customers who shop smarter with CART.
+        </p>
+        <a href="items.html" class="inline-block bg-white text-purple-700 hover:bg-gray-100 font-semibold px-8 py-3 rounded-full text-center transition duration-300 shadow-lg">
+          Start Shopping <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+    </section>
 
     <!-- Footer -->
-    <footer class="text-black-600 body-font bg-purple-400">
-      <div class="container px-5 py-24 mx-auto flex md:items-center lg:items-start md:flex-row md:flex-nowrap flex-wrap flex-col">
-        <div class="w-64 flex-shrink-0 md:mx-0 mx-auto text-center md:text-left">
-          <a class="flex title-font font-medium items-center md:justify-start justify-center text-gray-900">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              class="w-10 h-10 text-white p-2 bg-red-500 rounded-full"
-              viewBox="0 0 24 24"
-            >
-              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path>
-            </svg>
-          </a>
-          <p class="mt-2 text-sm text-black-500">Some footer text here.</p>
+    <footer class="bg-gray-900 text-gray-300 py-12">
+      <div class="container mx-auto px-4">
+        <div class="grid md:grid-cols-4 gap-8">
+          <div>
+            <div class="flex items-center space-x-2 mb-4">
+              <div class="w-10 h-10 bg-gradient-to-r from-red-500 to-pink-500 rounded-full flex items-center justify-center">
+                <i class="fas fa-shopping-cart text-white"></i>
+              </div>
+              <span class="text-xl font-bold text-white">CART</span>
+            </div>
+            <p class="mb-4">
+              Making online shopping simpler, faster, and more enjoyable.
+            </p>
+            <div class="flex space-x-4">
+              <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+              <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
+          
+          <div>
+            <h3 class="text-white font-semibold text-lg mb-4">Quick Links</h3>
+            <ul class="space-y-2">
+              <li><a href="home.html" class="hover:text-white transition">Home</a></li>
+              <li><a href="items.html" class="hover:text-white transition">Products</a></li>
+              <li><a href="cart.html" class="hover:text-white transition">Your Cart</a></li>
+              <li><a href="aboutus.html" class="hover:text-white transition">About Us</a></li>
+              <li><a href="contactus.html" class="hover:text-white transition">Contact</a></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 class="text-white font-semibold text-lg mb-4">Help & Info</h3>
+            <ul class="space-y-2">
+              <li><a href="#" class="hover:text-white transition">FAQs</a></li>
+              <li><a href="#" class="hover:text-white transition">Shipping Info</a></li>
+              <li><a href="#" class="hover:text-white transition">Returns Policy</a></li>
+              <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
+            </ul>
+          </div>
+          
+          <div>
+            <h3 class="text-white font-semibold text-lg mb-4">Contact Us</h3>
+            <p class="mb-2"><i class="fas fa-map-marker-alt mr-2"></i>2B, City road, Pune</p>
+            <p class="mb-2"><i class="fas fa-phone mr-2"></i>7878787878</p>
+            <p><i class="fas fa-envelope mr-2"></i> xyzcarta@gmail.com</p>
+          </div>
         </div>
       </div>
     </footer>
-
-    <!-- Logout Script -->
-    <script>
-      function logout() {
-        alert("You have been logged out.");
-        window.location.href = "index.html"; // Redirect to login page
-      }
-    </script>
   </body>
 </html>
